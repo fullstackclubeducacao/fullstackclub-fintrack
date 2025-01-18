@@ -6,6 +6,7 @@ import { api } from '@/lib/axios'
 
 export const AuthContext = createContext({
   user: null,
+  isInitializing: true,
   login: () => {},
   signup: () => {},
 })
@@ -27,6 +28,7 @@ const removeTokens = () => {
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState()
+  const [isInitializing, setIsInitializing] = useState(true)
   const signupMutation = useMutation({
     mutationKey: ['signup'],
     mutationFn: async (variables) => {
@@ -52,6 +54,7 @@ export const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     const init = async () => {
       try {
+        setIsInitializing(true)
         const accessToken = localStorage.getItem(LOCAL_STORAGE_ACCESS_TOKEN_KEY)
         const refreshToken = localStorage.getItem(
           LOCAL_STORAGE_REFRESH_TOKEN_KEY
@@ -64,8 +67,11 @@ export const AuthContextProvider = ({ children }) => {
         })
         setUser(response.data)
       } catch (error) {
+        setUser(null)
         removeTokens()
         console.error(error)
+      } finally {
+        setIsInitializing(false)
       }
     }
     init()
@@ -102,6 +108,7 @@ export const AuthContextProvider = ({ children }) => {
         user,
         login,
         signup,
+        isInitializing,
       }}
     >
       {children}
