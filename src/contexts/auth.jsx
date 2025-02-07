@@ -6,7 +6,6 @@ import {
   LOCAL_STORAGE_ACCESS_TOKEN_KEY,
   LOCAL_STORAGE_REFRESH_TOKEN_KEY,
 } from '@/constants/local-storage'
-import { protectedApi } from '@/lib/axios'
 import { UserService } from '@/services/user'
 
 export const AuthContext = createContext({
@@ -55,8 +54,8 @@ export const AuthContextProvider = ({ children }) => {
           LOCAL_STORAGE_REFRESH_TOKEN_KEY
         )
         if (!accessToken && !refreshToken) return
-        const response = await protectedApi.get('/users/me')
-        setUser(response.data)
+        const response = await UserService.me()
+        setUser(response)
       } catch (error) {
         setUser(null)
         console.error(error)
