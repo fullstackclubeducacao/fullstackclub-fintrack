@@ -7,6 +7,7 @@ import {
   LOCAL_STORAGE_REFRESH_TOKEN_KEY,
 } from '@/constants/local-storage'
 import { protectedApi, publicApi } from '@/lib/axios'
+import { UserService } from '@/services/user'
 
 export const AuthContext = createContext({
   user: null,
@@ -34,13 +35,8 @@ export const AuthContextProvider = ({ children }) => {
   const signupMutation = useMutation({
     mutationKey: ['signup'],
     mutationFn: async (variables) => {
-      const response = await publicApi.post('/users', {
-        first_name: variables.firstName,
-        last_name: variables.lastName,
-        email: variables.email,
-        password: variables.password,
-      })
-      return response.data
+      const response = await UserService.signup(variables)
+      return response
     },
   })
   const loginMutation = useMutation({
@@ -87,6 +83,8 @@ export const AuthContextProvider = ({ children }) => {
       },
     })
   }
+  // Service Pattern/Layer
+  // criar uma camada (arquivo, objeto) que é responsável por chamar uma API
   const login = (data) => {
     loginMutation.mutate(data, {
       onSuccess: (loggedUser) => {
