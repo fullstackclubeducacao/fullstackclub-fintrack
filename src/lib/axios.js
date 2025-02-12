@@ -6,11 +6,11 @@ import {
 } from '@/constants/local-storage'
 
 export const protectedApi = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'https://fullstackclub-finance-dashboard-api.onrender.com/api',
 })
 
 export const publicApi = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'https://fullstackclub-finance-dashboard-api.onrender.com/api',
 })
 
 protectedApi.interceptors.request.use((request) => {
