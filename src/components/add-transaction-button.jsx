@@ -1,12 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import {
+  Loader2Icon,
   PiggyBankIcon,
   PlusIcon,
   TrendingDownIcon,
   TrendingUpIcon,
 } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
+import { toast } from 'sonner'
 import { z } from 'zod'
 
 import {
@@ -19,6 +23,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
+import { useAuthContext } from '@/contexts/auth'
+import { TransactionService } from '@/services/transaction'
 
 import { Button } from './ui/button'
 import { DatePicker } from './ui/date-picker'
@@ -46,6 +52,18 @@ const formSchema = z.object({
 })
 
 const AddTransactionButton = () => {
+  const queryClient = useQueryClient()
+  const { user } = useAuthContext()
+  const { mutateAsync: createTransaction } = useMutation({
+    mutationKey: ['createTransaction'],
+    mutationFn: (input) => TransactionService.create(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['balance', user.id],
+      })
+    },
+  })
+  const [dialogIsOpen, setDialogIsOpen] = useState(false)
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,12 +74,18 @@ const AddTransactionButton = () => {
     },
     shouldUnregister: true,
   })
-  const onSubmit = (data) => {
-    console.log({ data })
+  const onSubmit = async (data) => {
+    try {
+      await createTransaction(data)
+      setDialogIsOpen(false)
+      toast.success('Transação criada com sucesso!')
+    } catch (error) {
+      console.error(error)
+    }
   }
   return (
     <>
-      <Dialog>
+      <Dialog open={dialogIsOpen} onOpenChange={setDialogIsOpen}>
         <DialogTrigger asChild>
           <Button>
             <PlusIcon />
@@ -180,11 +204,23 @@ const AddTransactionButton = () => {
               />
               <DialogFooter className="sm:space-x-4">
                 <DialogClose asChild>
-                  <Button type="reset" variant="secondary" className="w-full">
+                  <Button
+                    type="reset"
+                    variant="secondary"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
                     Cancelar
                   </Button>
                 </DialogClose>
-                <Button type="submit" className="w-full">
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={form.formState.isSubmitting}
+                >
+                  {form.formState.isSubmitting && (
+                    <Loader2Icon className="animate-spin" />
+                  )}
                   Adicionar
                 </Button>
               </DialogFooter>
