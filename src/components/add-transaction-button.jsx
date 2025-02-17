@@ -61,6 +61,7 @@ const AddTransactionButton = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: getUserBalanceQueryKey({ userId: user.id }),
+        exact: false, // padrão
       })
     },
   })
