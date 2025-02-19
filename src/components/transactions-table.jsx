@@ -1,13 +1,12 @@
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale/pt-BR'
-import { ExternalLinkIcon } from 'lucide-react'
 import { useSearchParams } from 'react-router'
 
 import { useGetTransactions } from '@/api/hooks/transaction'
 import { formatCurrency } from '@/helpers/currency'
 
+import EditTransactionButton from './edit-transaction-button'
 import TransactionTypeBadge from './transaction-type-badge'
-import { Button } from './ui/button'
 import { DataTable } from './ui/data-table'
 import { ScrollArea } from './ui/scroll-area'
 
@@ -42,12 +41,8 @@ const columns = [
   {
     accessorKey: 'actions',
     header: 'Ações',
-    cell: () => {
-      return (
-        <Button variant="ghost" size="icon">
-          <ExternalLinkIcon className="text-muted-foreground" />
-        </Button>
-      )
+    cell: ({ row: { original: transaction } }) => {
+      return <EditTransactionButton transaction={transaction} />
     },
   },
 ]

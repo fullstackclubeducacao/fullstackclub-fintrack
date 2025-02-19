@@ -25,6 +25,33 @@ export const useCreateTransaction = () => {
   })
 }
 
+export const updateTransactionMutationKey = (id) => ['updateTransaction', id]
+
+// porque eu não recebo um objeto? - 1 parametro apenas
+export const useUpdateTransaction = (id) => {
+  const queryClient = useQueryClient()
+  const { user } = useAuthContext()
+  return useMutation({
+    mutationKey: updateTransactionMutationKey(id),
+    mutationFn: (input) =>
+      TransactionService.update({
+        id,
+        amount: input.amount,
+        date: input.date,
+        name: input.name,
+        type: input.type,
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: getUserBalanceQueryKey({ userId: user.id }),
+      })
+      queryClient.invalidateQueries({
+        queryKey: getTransactionsQueryKey({ userId: user.id }),
+      })
+    },
+  })
+}
+
 export const getTransactionsQueryKey = ({ userId, from, to }) => {
   if (!from || !to) {
     return ['getTransactions', userId]
