@@ -1,10 +1,4 @@
-import {
-  Loader2Icon,
-  PiggyBankIcon,
-  PlusIcon,
-  TrendingDownIcon,
-  TrendingUpIcon,
-} from 'lucide-react'
+import { Loader2Icon, PlusIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -20,6 +14,7 @@ import {
 } from '@/components/ui/dialog'
 import { useCreateTransactionForm } from '@/forms/hooks/transaction'
 
+import TransactionTypeSelect from './transaction-type-select'
 import { Button } from './ui/button'
 import CurrencyInput from './ui/currency-input'
 import { DatePicker } from './ui/date-picker'
@@ -121,40 +116,10 @@ const AddTransactionButton = () => {
                   <FormItem>
                     <FormLabel>Tipo</FormLabel>
                     <FormControl>
-                      <div className="grid grid-cols-3 gap-4">
-                        <Button
-                          type="button"
-                          variant={
-                            field.value === 'EARNING' ? 'secondary' : 'outline'
-                          }
-                          onClick={() => field.onChange('EARNING')}
-                        >
-                          <TrendingUpIcon className="text-primary-green" />
-                          Ganho
-                        </Button>
-                        <Button
-                          type="button"
-                          variant={
-                            field.value === 'EXPENSE' ? 'secondary' : 'outline'
-                          }
-                          onClick={() => field.onChange('EXPENSE')}
-                        >
-                          <TrendingDownIcon className="text-primary-red" />
-                          Gasto
-                        </Button>
-                        <Button
-                          type="button"
-                          variant={
-                            field.value === 'INVESTMENT'
-                              ? 'secondary'
-                              : 'outline'
-                          }
-                          onClick={() => field.onChange('INVESTMENT')}
-                        >
-                          <PiggyBankIcon className="text-primary-blue" />
-                          Investimento
-                        </Button>
-                      </div>
+                      <TransactionTypeSelect
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
