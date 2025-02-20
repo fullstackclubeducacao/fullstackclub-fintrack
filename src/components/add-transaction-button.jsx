@@ -6,7 +6,6 @@ import {
   TrendingUpIcon,
 } from 'lucide-react'
 import { useState } from 'react'
-import { NumericFormat } from 'react-number-format'
 import { toast } from 'sonner'
 
 import {
@@ -22,6 +21,7 @@ import {
 import { useCreateTransactionForm } from '@/forms/hooks/transaction'
 
 import { Button } from './ui/button'
+import CurrencyInput from './ui/currency-input'
 import { DatePicker } from './ui/date-picker'
 import {
   Form,
@@ -85,14 +85,9 @@ const AddTransactionButton = () => {
                   <FormItem>
                     <FormLabel>Valor</FormLabel>
                     <FormControl>
-                      <NumericFormat
-                        placeholder="Digite o valor da transação"
-                        thousandSeparator="."
-                        decimalSeparator=","
-                        prefix="R$ "
-                        allowNegative={false}
-                        customInput={Input}
+                      <CurrencyInput
                         {...field}
+                        placeholder="Digite o valor da transação"
                         onChange={() => {}}
                         onValueChange={(values) =>
                           field.onChange(values.floatValue)
