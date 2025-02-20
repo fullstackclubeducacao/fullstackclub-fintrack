@@ -6,6 +6,7 @@ import {
   useCreateTransaction,
   useEditTransaction,
 } from '@/api/hooks/transaction'
+import { getTransactionDate } from '@/helpers/date'
 
 import {
   createTransactionFormSchema,
@@ -39,7 +40,7 @@ export const useCreateTransactionForm = ({ onSuccess, onError }) => {
 const getEditTransactionFormDefaultValues = (transaction) => ({
   name: transaction.name,
   amount: parseFloat(transaction.amount),
-  date: new Date(transaction.date),
+  date: getTransactionDate(transaction),
   type: transaction.type,
 })
 
