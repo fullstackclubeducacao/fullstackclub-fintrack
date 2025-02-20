@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
 import {
@@ -35,19 +36,24 @@ export const useCreateTransactionForm = ({ onSuccess, onError }) => {
   return { form, onSubmit }
 }
 
+const getEditTransactionFormDefaultValues = (transaction) => ({
+  name: transaction.name,
+  amount: parseFloat(transaction.amount),
+  date: new Date(transaction.date),
+  type: transaction.type,
+})
+
 export const useEditTransactionForm = ({ transaction, onSuccess, onError }) => {
   const { mutateAsync: updateTransaction } = useEditTransaction()
   const form = useForm({
     resolver: zodResolver(editTransactionFormSchema),
-    defaultValues: {
-      id: transaction.id,
-      name: transaction.name,
-      amount: parseFloat(transaction.amount),
-      date: transaction.date,
-      type: transaction.type,
-    },
+    defaultValues: getEditTransactionFormDefaultValues(transaction),
     shouldUnregister: true,
   })
+  useEffect(() => {
+    form.reset(getEditTransactionFormDefaultValues(transaction))
+    form.setValue('id', transaction.id)
+  }, [form, transaction])
   const onSubmit = async (data) => {
     await updateTransaction(data)
     try {
