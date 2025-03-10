@@ -49,4 +49,13 @@ export const TransactionService = {
     })
     return response.data
   },
+  /**
+   * Retorna as transações do usuário autenticado.
+   * @param {Object} input
+   * @param {string} input.id - ID da transação a ser deletada.
+   */
+  delete: async (input) => {
+    const response = await protectedApi.delete(`/transactions/me/${input.id}`)
+    return response.data
+  },
 }
