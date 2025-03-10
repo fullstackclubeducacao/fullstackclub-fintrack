@@ -1,3 +1,4 @@
+import { PiggyBankIcon, TrendingDownIcon, TrendingUpIcon } from 'lucide-react'
 import { useSearchParams } from 'react-router'
 import { Pie, PieChart } from 'recharts'
 
@@ -9,6 +10,9 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 import { formatCurrency } from '@/helpers/currency'
+
+import TransactionTypeChartLabel from './transaction-type-chart-label'
+import TransactionTypeIcon from './transaction-type-icon'
 
 const chartConfig = {
   expenses: {
@@ -49,7 +53,7 @@ const TransactionTypeChart = () => {
   ]
   return (
     <Card className="flex flex-col">
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex flex-1 items-center gap-6 pb-0">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-[250px]"
@@ -72,6 +76,41 @@ const TransactionTypeChart = () => {
             />
           </PieChart>
         </ChartContainer>
+        {/* ITENS */}
+        <div className="space-y-3">
+          <TransactionTypeChartLabel
+            icon={
+              <TransactionTypeIcon
+                icon={
+                  <TrendingUpIcon className="text-primary-green" size={16} />
+                }
+                label="Gastos"
+              />
+            }
+            value={`${data?.earningsPercentage}%`}
+          />
+          <TransactionTypeChartLabel
+            icon={
+              <TransactionTypeIcon
+                icon={
+                  <TrendingDownIcon className="text-primary-red" size={16} />
+                }
+                label="Gastos"
+              />
+            }
+            value={`${data?.expensesPercentage}%`}
+          />
+          <TransactionTypeChartLabel
+            icon={
+              <TransactionTypeIcon
+                icon={<PiggyBankIcon className="text-primary-blue" size={16} />}
+                label="Investimentos"
+              />
+            }
+            label="Investimentos"
+            value={`${data?.investmentsPercentage}%`}
+          />
+        </div>
       </CardContent>
     </Card>
   )
