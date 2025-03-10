@@ -6,6 +6,7 @@ import { useGetTransactions } from '@/api/hooks/transaction'
 import { formatCurrency } from '@/helpers/currency'
 import { getTransactionDate } from '@/helpers/date'
 
+import DeleteTransactionButton from './delete-transaction-button'
 import EditTransactionButton from './edit-transaction-button'
 import TransactionTypeBadge from './transaction-type-badge'
 import { DataTable } from './ui/data-table'
@@ -52,7 +53,12 @@ const columns = [
     accessorKey: 'actions',
     header: 'Ações',
     cell: ({ row: { original: transaction } }) => {
-      return <EditTransactionButton transaction={transaction} />
+      return (
+        <div className="flex items-center gap-2">
+          <EditTransactionButton transaction={transaction} />
+          <DeleteTransactionButton transactionId={transaction.id} />
+        </div>
+      )
     },
   },
 ]
