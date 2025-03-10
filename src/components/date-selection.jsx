@@ -10,6 +10,20 @@ import { DatePickerWithRange } from './ui/date-picker-with-range'
 
 const formatDateToQueryParam = (date) => format(date, 'yyyy-MM-dd')
 
+export const useFromAndToSearchParams = () => {
+  const [searchParams] = useSearchParams()
+  const defaultDate = {
+    from: new Date(),
+    to: addMonths(new Date(), 1),
+  }
+  const from = searchParams.get('from')
+  const to = searchParams.get('to')
+  if (!from || !to) {
+    return defaultDate
+  }
+  return { from, to }
+}
+
 const getInitialDateState = (searchParams) => {
   const defaultDate = {
     from: new Date(),

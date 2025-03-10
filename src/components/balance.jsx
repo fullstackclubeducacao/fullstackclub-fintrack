@@ -9,6 +9,7 @@ import { useSearchParams } from 'react-router'
 import { useGetUserBalance } from '@/api/hooks/user'
 
 import BalanceItem from './balance-item'
+import TransactionTypeIcon from './transaction-type-icon'
 
 const Balance = () => {
   const [searchParams] = useSearchParams()
@@ -25,17 +26,32 @@ const Balance = () => {
       <BalanceItem
         label="Ganhos"
         amount={data?.earnings}
-        icon={<TrendingUpIcon className="text-primary-green" size={16} />}
+        icon={
+          <TransactionTypeIcon
+            icon={<TrendingUpIcon className="text-primary-green" size={16} />}
+            label="Ganhos"
+          />
+        }
       />
       <BalanceItem
         label="Gastos"
         amount={data?.expenses}
-        icon={<TrendingDownIcon className="text-primary-red" size={16} />}
+        icon={
+          <TransactionTypeIcon
+            icon={<TrendingDownIcon className="text-primary-red" size={16} />}
+            label="Ganhos"
+          />
+        }
       />
       <BalanceItem
         label="Investimentos"
         amount={data?.investments}
-        icon={<PiggyBankIcon className="text-primary-blue" size={16} />}
+        icon={
+          <TransactionTypeIcon
+            icon={<PiggyBankIcon className="text-primary-blue" size={16} />}
+            label="Investimentos"
+          />
+        }
       />
     </div>
   )
